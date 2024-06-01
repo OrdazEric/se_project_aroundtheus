@@ -12,6 +12,10 @@
     line-height: 1.21;
     text-align: left;
 }
+
+.footer__copyright {
+  margin: 0;
+}
   
 @media screen and (max-width: 625px) {
     .footer {

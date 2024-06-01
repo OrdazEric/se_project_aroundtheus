@@ -12,3 +12,7 @@ Hello, my name is Eric Ordaz and this is thej first project starting from scratc
   
 # Video Link:  
   https://drive.google.com/file/d/1NrzvEutXF2agEAbGT6fRLowsyoxT7-Bv/view?usp=drive_link
+
+# Github Repository
+
+  https://github.com/OrdazEric/se_project_aroundtheus
