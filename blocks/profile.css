@@ -1,0 +1,123 @@
+.profile {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 51px;
+}
+
+.profile__info {
+    display: grid;
+    grid-template-areas: 
+        "title button"
+        "description description";
+    grid-template-columns: minmax(auto, 373px), auto;
+    column-gap: 15px;
+}
+
+.profile__edit-button {
+    background: transparent url(../images/edit-icon.svg) center no-repeat;
+    height: 24px;
+    width: 24px;
+    grid-area: button;
+    border: 1px solid white;
+    padding: 0;
+    margin: auto 0;
+    transition: opacity 0.6s;
+    cursor: pointer;
+}
+
+.profile__add-button {
+    background: transparent url(../images/add-Button.svg) center no-repeat;
+    width: 150px;
+    height: 50px;
+    margin-left: auto;
+    border: 2px solid white;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.profile__title {
+    font-size: 42px;
+    line-height: 1.14;
+    font-weight: 500;
+    grid-area: title;
+    margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.profile__description {
+    font-size: 18px;
+    line-height: 1.22;
+    font-weight: 400;
+    grid-area: description;
+    margin: 16px 0 0 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.profile__image {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-position: center;
+    margin-right: 24px;
+}
+
+@media screen and (max-width: 625px) {
+    .profile__info {
+      justify-items: center;
+      grid-template-columns: minmax(auto, 217px) auto;
+    }
+  
+    .profile__image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0;
+    }
+  
+    .profile__title {
+      margin: 30px 0 0;
+      font-size: 22px;
+    }
+  
+    .profile__description {
+      font-size: 14px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+  
+    .profile__edit-button {
+      height: 18px;
+      width: 18px;
+    }
+  
+    .profile__add-button {
+      width: 282px;
+      height: 50px;
+      border-width: 1px;
+      margin: 0;
+    }
+  }
+
+@media screen and (max-width: 880px) {
+    .profile__add-button {
+      width: 50px;
+      transition: width 1s;
+    }
+  
+    .profile__title {
+      font-size: 32px;
+    }
+  
+    .profile__info {
+      grid-template-columns: minmax(auto, 282px) auto;
+    }
+}
+  
