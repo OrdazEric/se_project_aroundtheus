@@ -21,29 +21,30 @@
     grid-area: button;
     border: 1px solid white;
     padding: 0;
-    margin: auto 0;
+    margin: auto 10px;
     cursor: pointer;
 }
 
 .profile__edit-button:hover {
-  opacity: 0.6;
-  transition: 0.2s;
-  cursor: pointer;
+    opacity: 0.6;
+    transition: 0.2s;
+    cursor: pointer;
 }
 
 .profile__add-button {
     background: transparent url(../images/add-Button.svg) center no-repeat;
     padding: 0;
-    width: 150px;
+    min-width: 150px;
     height: 50px;
-    margin-left: auto;
+    margin: 0 10px 0 auto;
     border: 2px solid white;
+    border-radius: 2px;
 }
 
 .profile__add-button:hover {
-  opacity: 0.6;
-  transition: 0.2s;
-  cursor: pointer;
+    opacity: 0.6;
+    transition: 0.2s;
+    cursor: pointer;
 }
 
 .profile__title {
@@ -69,7 +70,7 @@
 }
 
 .profile__image {
-    margin-right: 30px ;
+    margin: 0 30px 0 10px ;
     height: 120px;
     width: 120px;
     border-radius: 50%;
@@ -84,7 +85,7 @@
     }
 
     .profile__image {
-      margin-bottom: 30px;
+      margin: 0 auto 30px auto;
     }
   
     .profile__title {
@@ -100,15 +101,13 @@
     .profile__edit-button {
       height: 18px;
       width: 18px;
-      margin: 4px auto 0 0;
+      margin: 4px auto 0 auto;
     }
   
     .profile__add-button {
       width: 282px;
       min-height: 50px;
-      border-width: 2px;
       margin: 0;
-
     }
   }
 

@@ -26,10 +26,11 @@
     .page__section {
       display: flex;
       flex-direction: column;
+      margin: 0;
     }
   
     .page__content {
-      margin: auto;
+      margin: 0;
     }
 }
 
