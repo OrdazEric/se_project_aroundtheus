@@ -79,6 +79,10 @@
 }
 
 @media screen and (max-width: 625px) {
+    .profile {
+      padding-bottom: 36px;
+      padding-top: 42px;
+    }
     .profile__info {
       justify-items: center;
       grid-template-columns: minmax(auto, 217px) auto;
