@@ -9,13 +9,14 @@
 .header__logo {
     width: 173px;
     height: 33px;
-    margin: auto;
+    margin-bottom: auto;
 }
 
 @media screen and (max-width: 625px) {
     .header {
+      margin-top: 36px;
       box-sizing: border-box;
-      max-width: 320px;
+      min-width: 320px;
       min-height: 56px;
       width: 100%;
     }
@@ -26,9 +27,3 @@
     }
 }
 
-@media screen and (max-width: 880px) {
-    .header {
-      padding-left: 2%;
-      width: calc(100% - 30px);
-    }
-}
