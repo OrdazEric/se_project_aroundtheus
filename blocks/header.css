@@ -13,7 +13,22 @@
     margin: 0 0 auto 10px;
 }
 
-@media screen and (max-width: 625px) {
+@media screen and (max-width: 770px) {
+  .header {
+    margin-top: 36px;
+    box-sizing: border-box;
+    max-width: 320px;
+    max-height: 56px;
+    width: 100%;
+  }
+  .header__logo {
+    width: 124px;
+    height: 24px;
+    margin-left: 27px;
+  }
+}
+
+@media screen and (max-width: 320px) {
     .header {
       margin-top: 36px;
       box-sizing: border-box;
