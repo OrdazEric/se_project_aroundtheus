@@ -15,10 +15,10 @@
 
 @media screen and (max-width: 770px) {
   .header {
-    margin-top: 36px;
+    margin-top: 28px;
     box-sizing: border-box;
     max-width: 320px;
-    max-height: 56px;
+    min-height: 56px;
     width: 100%;
   }
   .header__logo {
