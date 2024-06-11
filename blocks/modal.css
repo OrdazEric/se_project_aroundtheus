@@ -1,0 +1,117 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    color: #000;
+    display: flex;
+    padding: 0 19px;
+    visibility: hidden;
+}
+
+.modal__openned {
+    visibility: visible;
+}
+
+.modal__container {
+    position: relative;
+    padding: 36px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin: auto;
+    max-width: 430px;
+    min-height: 330px;
+    box-sizing: border-box;
+}
+
+.modal__close {
+    background-image: url(../images/close.svg);
+    bottom: calc(100% + 5px);
+    left: calc(100% + 5px);
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.modal__close:hover {
+    opacity: 0.6;
+  }  
+
+.modal__heading {
+    width: 330px;
+    height: 24px;
+    font-weight: 900; 
+    font-size: 1.21;
+    margin-bottom: 54px;
+}
+
+.modal__form {
+    max-width: 100%;
+}
+
+.modal__form-input {
+    width: 100%;
+    height: 28px;
+    margin-bottom: 30px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+  }
+  
+  .modal__form-input:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .modal__button {
+    width: 100%;
+    margin-top: 48px;
+    height: 50px;
+    background-color: #000;
+    color: #fff;
+    font-weight: 400;
+    font-size: 18px;
+    border-radius: 2px;
+    border: none;
+  }
+  
+  .modal__button:hover {
+    cursor: pointer;
+    opacity: 80%;
+  }
+
+@media screen and (max-width: 768px) {
+    .modal__close {
+        top: -54px;
+        right: 0px;
+        width: 26px;
+        height: 26px;
+    }
+  
+    .modal__container {
+        max-width: 238px;
+        padding: 25px 22px;
+    }
+  
+    .modal__heading {
+        font-size: 18px;
+        margin: 0 0 45px 0;
+    }
+  
+    .modal__button {
+        font-size: 14px;
+        margin: 45px 0 0 0;
+        font-weight: 400;
+    }
+}
