@@ -24,3 +24,15 @@ let sixthCard = {name: "Lago di Braies",
 
 let initialCards = [firstcard, secondCard, thirdCard, fourthCard, fifthCard, sixthCard];
 console.log(initialCards);
+
+const profileEditButton = document.querySelector(".profile__edit-button");
+const profileEditModal = document.querySelector(".modal");
+const profileCloseButton = document.querySelector(".modal__close");
+
+profileEditButton.addEventListener("click", () => {
+    profileEditModal.classList.add("modal__opened");
+});
+
+profileCloseButton.addEventListener("click", () => {
+    profileEditModal.classList.remove("modal__opened");
+});
