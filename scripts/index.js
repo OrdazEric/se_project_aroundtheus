@@ -1,38 +1,58 @@
-let firstcard = {name: "Yosemite Valley",
+let initialCards = [{name: "Yosemite Valley",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/yosemite.jpg"
-};
-
-let secondCard = {name: "Lake Louise",
+}, {name: "Lake Louise",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/lake-louise.jpg"
-};
-
-let thirdCard = {name: "Bald Mountains",
+}, {name: "Bald Mountains",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/bald-mountains.jpg"
-};
-
-let fourthCard = {name: "Latemar",
+}, {name: "Latemar",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/latemar.jpg"
-};
-
-let fifthCard = {name: "Vanoise National Park",
+}, {name: "Vanoise National Park",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/vanoise.jpg"
-};
-
-let sixthCard = {name: "Lago di Braies",
+}, {name: "Lago di Braies",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/lago.jpg"
-};
+}];
 
-let initialCards = [firstcard, secondCard, thirdCard, fourthCard, fifthCard, sixthCard];
-console.log(initialCards);
+const profileEditButton = document.querySelector("#profile-edit-button");
+const profileEditModal = document.querySelector("#profile-edit-modal");
+const profileCloseButton = document.querySelector("#modal-close-button");
+const profileName = document.querySelector("#profile-title");
+const profileDescription = document.querySelector("#profile-description");
+const profileNameInput = document.querySelector("#profile-name-input");
+const profileDescriptionInput = document.querySelector("#profile-description-input");
+const profileEditForm = profileEditModal.querySelector(".modal__form");
+const cardListEl = document.querySelector(".cards__list");
+const cardTemplate = document.querySelector("#card-template").content.firstElementChild;
 
-const profileEditButton = document.querySelector(".profile__edit-button");
-const profileEditModal = document.querySelector(".modal");
-const profileCloseButton = document.querySelector(".modal__close");
+function closePopup() {
+    profileEditModal.classList.remove("modal__opened");
+}
+
+function handleProfileEditSubmit(e) {
+    e.preventDefault();
+    profileName.textContent = profileNameInput.value;
+    profileDescription.textContent = profileDescriptionInput.value;
+    closePopup();
+}
+
+function getCardElement(cardData) {
+    const cardElement = cardTemplate.cloneNode(true);
+    const cardImageEl = cardElement.querySelector(".card__image");
+    const cardNameEl = cardElement.querySelector(".card__title");
+    cardImageEl.src = cardData.link;
+    cardImageEl.alt = cardData.name;
+    cardNameEl.textContent = cardData.name;
+    return cardElement;
+}
 
 profileEditButton.addEventListener("click", () => {
+    profileNameInput.value = profileName.textContent;
+    profileDescriptionInput.value = profileDescription.textContent;
     profileEditModal.classList.add("modal__opened");
 });
 
-profileCloseButton.addEventListener("click", () => {
-    profileEditModal.classList.remove("modal__opened");
+profileCloseButton.addEventListener("click", () => {closePopup();});
+profileEditForm.addEventListener("submit", handleProfileEditSubmit);
+initialCards.forEach((cardData) => {
+    const cardElement = getCardElement(cardData);
+    cardListEl.append(cardElement);
 });
