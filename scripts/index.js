@@ -1,4 +1,4 @@
-let initialCards = [{name: "Yosemite Valley",
+const initialCards = [{name: "Yosemite Valley",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/yosemite.jpg"
 }, {name: "Lake Louise",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/lake-louise.jpg"
@@ -23,15 +23,25 @@ const profileEditForm = profileEditModal.querySelector(".modal__form");
 const cardListEl = document.querySelector(".cards__list");
 const cardTemplate = document.querySelector("#card-template").content.firstElementChild;
 
-function closePopup() {
-    profileEditModal.classList.remove("modal__opened");
+function openEditProfileModal() {
+    fillProfileForm();
+    profileEditModal.classList.add("modal_opened");
+}
+
+function fillProfileForm() {
+    profileNameInput.value = profileName.textContent;
+    profileDescriptionInput.value = profileDescription.textContent;
+}
+
+function closeEditProfileModal() {
+    profileEditModal.classList.remove("modal_opened");
 }
 
 function handleProfileEditSubmit(e) {
     e.preventDefault();
     profileName.textContent = profileNameInput.value;
     profileDescription.textContent = profileDescriptionInput.value;
-    closePopup();
+    closeEditProfileModal();
 }
 
 function getCardElement(cardData) {
@@ -44,13 +54,9 @@ function getCardElement(cardData) {
     return cardElement;
 }
 
-profileEditButton.addEventListener("click", () => {
-    profileNameInput.value = profileName.textContent;
-    profileDescriptionInput.value = profileDescription.textContent;
-    profileEditModal.classList.add("modal__opened");
-});
+profileEditButton.addEventListener("click", () => {openEditProfileModal();});
+profileCloseButton.addEventListener("click", () => {closeEditProfileModal();});
 
-profileCloseButton.addEventListener("click", () => {closePopup();});
 profileEditForm.addEventListener("submit", handleProfileEditSubmit);
 initialCards.forEach((cardData) => {
     const cardElement = getCardElement(cardData);
