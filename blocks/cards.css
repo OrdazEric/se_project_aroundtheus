@@ -1,7 +1,3 @@
-.cards {
-    margin: 0 auto;
-}
- 
 .cards__list {
     display: grid;
     justify-content: center;
