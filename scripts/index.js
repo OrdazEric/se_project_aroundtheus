@@ -97,6 +97,7 @@ function handleAddCardSubmit(ev) {
     const name = cardTitleInput.value;
     const link = cardUrlInput.value;
     renderCard({ name, link }, cardListEl);
+    ev.target.reset();
     closeModal(addCardModal);
 }
 
@@ -112,6 +113,9 @@ profileCloseButton.addEventListener("click", () => closeModal(profileEditModal))
 previewCloseButton.addEventListener('click', () => closeModal(previewImageModal));
 
 addNewCardButton.addEventListener('click', () => openModal(addCardModal));
-addCardModalCloseButton.addEventListener('click', () => closeModal(addCardModal));
+addCardModalCloseButton.addEventListener('click', () => {
+    closeModal(addCardModal);
+    this.removeData(addCardModal);
+});
 
 initialCards.forEach((cardData) => renderCard(cardData, cardListEl));

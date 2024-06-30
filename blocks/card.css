@@ -4,6 +4,7 @@
     flex-direction: column;
     list-style: none;
     border-radius: 10px;
+    position: relative;
 }
 
 .card__image {
