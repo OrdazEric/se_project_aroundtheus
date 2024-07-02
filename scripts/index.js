@@ -113,9 +113,6 @@ profileCloseButton.addEventListener("click", () => closeModal(profileEditModal))
 previewCloseButton.addEventListener('click', () => closeModal(previewImageModal));
 
 addNewCardButton.addEventListener('click', () => openModal(addCardModal));
-addCardModalCloseButton.addEventListener('click', () => {
-    closeModal(addCardModal);
-    this.removeData(addCardModal);
-});
+addCardModalCloseButton.addEventListener('click', () => closeModal(addCardModal));
 
 initialCards.forEach((cardData) => renderCard(cardData, cardListEl));
