@@ -95,8 +95,8 @@ function getCardElement(data) {
   const cardTitleElement = cardElement.querySelector(".card__title");
   const cardLikeButton = cardElement.querySelector(".card__like-button");
   const cardDeleteButton = cardElement.querySelector(".card__delete-button");
-  const popUpImage = document.querySelector(".modal__image");
-  const popUpTitle = document.querySelector(".modal__title");
+  const popUpImage = document.querySelector(".modal__preview-image");
+  const popUpTitle = document.querySelector(".modal__preview-title");
 
   cardDeleteButton.addEventListener("click", () => {
     cardElement.remove();

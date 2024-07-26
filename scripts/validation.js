@@ -49,7 +49,7 @@ function disableButton(submitButton) {
   return;
 }
 
-function toogleButtonState(
+function toggleButtonState(
   inputElements,
   submitButton,
   { inactiveButtonClass }
@@ -69,7 +69,7 @@ function setEventListners(formElement, options) {
   inputElements.forEach((inputElement) => {
     inputElement.addEventListener("input", (e) => {
       checkInputValidity(formElement, inputElement, options);
-      toogleButtonState(inputElements, submitButton, options);
+      toggleButtonState(inputElements, submitButton, options);
     });
   });
 }
@@ -91,7 +91,7 @@ const config = {
   formSelector: ".modal__form",
   inputSelector: ".modal__input",
   submitButtonSelector: ".modal__button",
-  inactiveButtonClass: "modal__button_disabled",
+  inactiveButtonClass: "modal__button-disabled",
   inputErrorClass: "modal__input_type_error",
   errorClass: "modal__error_visible",
 };
