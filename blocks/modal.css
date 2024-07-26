@@ -81,7 +81,7 @@
 .modal__input {
     width: 100%;
     height: 28px;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
     border-top: none;
     border-left: none;
     border-right: none;
@@ -91,6 +91,9 @@
     line-height: 17px;
   }
 
+  .modal__input:last-of-type {
+    margin-top: 30px;
+  }
   .modal__input:hover {
     cursor: pointer;
     opacity: 0.8;
@@ -139,7 +142,7 @@
     color: #f00;
     font-size: 12px;
     line-height: 15px;
-    position: absolute;
+    position: relative;
     width: 358px;
     transition: opacity 0.3s;
   }
