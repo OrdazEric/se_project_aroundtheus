@@ -28,8 +28,8 @@
     background-color: #fff;
     border-radius: 10px;
     margin: auto;
-    max-width: 430px;
-    min-height: 330px;
+    max-width: 816px;
+    max-height: 540px;
     box-sizing: border-box;
 }
 
@@ -39,9 +39,8 @@
 }
 
 .modal__preview-image{
-    max-width: 75vw;
-    max-height: 75vh;
     max-width: 100%;
+    max-height: 100%;
 }
 
 .modal__preview-title{
@@ -153,23 +152,34 @@
     transition: opacity 0.3s;
   }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 879px) {
   .modal {
     max-width: 100%;
     box-sizing: border-box;
   }
 
   .modal__container {
-    width: 282px;
-    height: 322px;
-    border: 1px solid rgba(0, 0, 0, 1);
+    max-width: 282px;
+    max-height: 322px;
+    border: none;
     padding: 25px 22px;
     box-sizing: border-box;
   }
 
+  .modal__container-preview{
+    padding: 0;
+  }
+
   .modal__close {
     width: 26px;
-    left: 245px;
+    height: 26px;
+    bottom: calc(100% + 23.61px);
+    left: calc(88% + 2px);
+  }
+
+  .modal__preview-close {
+    bottom: calc(100% + 7px);
+    left: calc(100% + 7px);
   }
 
   .modal__heading {
@@ -179,7 +189,7 @@
   }
 
   .modal__input {
-    width: 232px;
+    max-width: 232px;
   }
 
   #add-card-url-input, #profile-description-input {
@@ -187,21 +197,24 @@
   }
 
   .modal__button-save {
-    width: auto;
-  }
+    position: relative;
+    max-width: 238px;
+    max-height: 46px;
   }
 
   .modal__preview-image {
     position: relative;
-    max-width: 75vw;
-    max-height: 75vh;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .modal__preview-image:hover {
     cursor: pointer;
   }
 
-  .modal__preview-container {
+  .modal__container-preview {
+    max-width: 282px;
+    max-height: 322px;
     margin: auto;
     color: #fff;
     position: relative;
@@ -223,3 +236,4 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
+}
