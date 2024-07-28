@@ -45,7 +45,12 @@
 }
 
 .modal__preview-title{
-    margin: 10px 0 0;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14.52px;
+  margin: 10px 0 0;
 }
 
 .modal__close {
@@ -86,13 +91,13 @@
     border-left: none;
     border-right: none;
     border-bottom: 1px solid rgba(0, 0, 0, .2);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 400;
     line-height: 17px;
   }
 
-  .modal__input:last-of-type {
-    margin-top: 30px;
+  #add-card-url-input, #profile-description-input {
+    margin-top: 16px;
   }
   .modal__input:hover {
     cursor: pointer;
@@ -108,7 +113,7 @@
     color: white;
     width: 100%;
     height: 50.15px;
-    margin-top: 48px;
+    margin-top: 31px;
   }
   
   .modal__button:hover {
@@ -135,15 +140,16 @@
   }
 
   .modal__error {
+    display: block;
     font-family: Inter, Arial, Helvetica, sans-serif;
     font-weight: 400;
     margin: 0;
-    height: 17px;
+    height: 12px;
     color: #f00;
     font-size: 12px;
-    line-height: 15px;
+    line-height: 14px;
     position: relative;
-    width: 358px;
+    width: 357px;
     transition: opacity 0.3s;
   }
 
