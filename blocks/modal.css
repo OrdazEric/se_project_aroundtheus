@@ -182,41 +182,44 @@
     width: 232px;
   }
 
+  #add-card-url-input, #profile-description-input {
+    margin-top: 30px;
+  }
+
   .modal__button-save {
     width: auto;
   }
-}
+  }
 
-.modal__preview-image {
-  position: relative;
-  max-width: 75vw;
-  max-height: 75vh;
-}
+  .modal__preview-image {
+    position: relative;
+    max-width: 75vw;
+    max-height: 75vh;
+  }
 
-.modal__preview-image:hover {
-  cursor: pointer;
-}
+  .modal__preview-image:hover {
+    cursor: pointer;
+  }
 
-.modal__preview-container {
-  margin: auto;
-  color: #fff;
-  position: relative;
-}
+  .modal__preview-container {
+    margin: auto;
+    color: #fff;
+    position: relative;
+  }
 
-.modal__label {
-  position: relative;
-}
+  .modal__label {
+    position: relative;
+  }
 
-.modal__error {
-  max-width: 100% ;
-  color: #f00;
-  left: 0;
-  bottom: 1px;
-  line-height: 15px;
-  font-size: 10px;
-}
+  .modal__error {
+    max-width: 100% ;
+    color: #f00;
+    left: 0;
+    bottom: 1px;
+    line-height: 15px;
+  }
 
-.modal__button-save_disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
+  .modal__button-save_disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
