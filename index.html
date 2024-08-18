@@ -35,7 +35,7 @@
         <div class="modal__container">
             <button aria-label="Close" class="modal__close" id="modal-close-button" type="button"></button>
             <h2 class="modal__heading">Edit Profile</h2>
-            <form class="modal__form" id="modal-form-profile">
+            <form class="modal__form" id="modal-form-profile" name="profile-form">
                 <label class="modal__label">
                     <input 
                         class="modal__input" 
@@ -72,7 +72,7 @@
         <div class="modal__container">
             <button aria-label="Close" class="modal__close" id="add-modal-close" type="button"></button>
             <h3 class="modal__heading">New Place</h3>
-            <form class="modal__form" id="modal-form-card">
+            <form class="modal__form" id="modal-form-card" name="card-form">
                 <label class="modal__label">
                     <input 
                         type="text" 
@@ -129,8 +129,7 @@
         </li>
     </template>
     
-    <script defer src="./scripts/index.js" ></script>
-    <script defer src="./scripts/validation.js"></script>
+    <script defer src="./pages/index.js" type="module" ></script>
 
 </body>
 </html>
