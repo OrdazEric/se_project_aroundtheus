@@ -117,28 +117,13 @@ allModals.forEach((modal) => {
 });
 
 const openPicturePopup = (imageSrc, imageTitle) => {
-  const cardImageElement = cardElement.querySelector(".card__image");
-  const cardTitleElement = cardElement.querySelector(".card__title");
+  popUpImage.src = imageSrc;
+  popUpImage.alt = imageTitle;
+  popUpTitle.textContent = imageTitle;
 
-  cardImageElement.src = imageSrc;
-  cardImageElement.alt = imageTitle;
-  cardTitleElement.textContent = imageTitle;
-
-  const img = new Image();
-  img.src = imageSrc;
-  img.onload = () => {
-    const previewImageModalContainer = previewImageModal.querySelector(
-      ".popup__container_large"
-    );
-    previewImageModalContainer.classList.remove("popup_landscape", "popup_portrait");
-    if (img.width > img.height) {
-      previewImageModalContainer.classList.add("popup_landscape");
-    } else {
-      previewImageModalContainer.classList.add("popup_portrait");
-    }
-    openModal(previewImageModal);
-  };
+  openModal(previewImageModal);
 };
+
 
 initialCards.forEach((data) => {
   const cardElement = createCard(data);
