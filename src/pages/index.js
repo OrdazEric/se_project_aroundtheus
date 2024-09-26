@@ -55,7 +55,7 @@ function handleImageClick(cardData) {
 function handleAddCardFormSubmit(inputData) {
   const cardData = {
     name: inputData.title,
-    link: inputData["Image URL"],
+    link: inputData.url,
   };
 
   createCard(cardData);
