@@ -36,7 +36,7 @@ const formValidationSettings = {
 
 const cardListEl = document.querySelector(".cards__list");
 const editProfileModal = document.querySelector("#profile-edit-modal");
-const editProfileForm = document.forms["modal-form-profile"];
+const editProfileForm = document.forms["profile-form"];
 const addCardModal = document.querySelector("#add-card-modal");
 const addCardForm = document.forms["modal-form-card"];
 

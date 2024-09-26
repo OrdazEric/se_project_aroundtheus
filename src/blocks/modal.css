@@ -126,9 +126,9 @@
   }
 
 
-  .modal__input_type_error{
+  /*.modal__input_type_error{
     border-bottom:1px solid red;
-  }
+  }*/
 
   .modal__label {
     position: relative;

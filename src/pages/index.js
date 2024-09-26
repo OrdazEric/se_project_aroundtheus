@@ -12,7 +12,8 @@ import {initialCards,
   profileDescription,
   nameInput,
   descriptionInput,
-  formValidationSettings} from "../utils/constants.js";
+  formValidationSettings,
+} from "../utils/constants.js";
 
 import FormValidator from "../components/FormValidator.js";
 
