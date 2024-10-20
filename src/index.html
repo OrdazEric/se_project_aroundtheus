@@ -17,13 +17,19 @@
         </header>
         <main class="content">
             <section class="profile page__section">
-                <img src="<%=require('./images/jacques-cousteau.png')%>" alt="Avatar" class="profile__image">
+                <div class="profile__image-container">
+                    <img src="<%=require('./images/jacques-cousteau.png')%>" alt="Avatar" class="profile__image">
+                    <!-- Icono de edición que aparece en hover -->
+                    <button class="profile__edit-image-button">
+                        <img src="<%=require('./images/Edit_pencil.svg')%>" alt="Edit Icon" class="profile__edit-image-icon">
+                    </button>
+                </div>
                 <div class="profile__info">
-                    <h1 class="profile__title" id="profile-title"> Jacques Cousteau</h1>
-                    <button aria-label="Edit" class="profile__edit-button" type="button"></button>
+                    <h1 class="profile__title" id="profile-title">Jacques Cousteau</h1>
+                    <button aria-label="Edit" class="profile__edit-button" type="button"></button> <!-- Botón para abrir popup de editar perfil -->
                     <p class="profile__description" id="profile-description">Explorer</p>
                 </div>
-                <button aria-label="Add" class="profile__add-button" type="button"></button>
+                <button aria-label="Add" class="profile__add-button" type="button"></button> <!-- Botón para abrir popup de agregar tarjeta -->
             </section>
             <section class="cards page__section">
                 <ul class="cards__list"></ul>
@@ -31,8 +37,10 @@
         </main>
         <footer class="footer page__section">
             <p class="footer__copyright">&copy; 2022 Around The U.S.</p>
-          </footer>
+        </footer>
     </div>
+
+    <!-- Modal de edición de perfil -->
     <div class="modal" id="profile-edit-modal">
         <div class="modal__container">
             <button aria-label="Close" class="modal__close" id="modal-close-button" type="button"></button>
@@ -54,22 +62,21 @@
                     <input 
                         class="modal__input" 
                         id="profile-description-input" 
-                        type="text" name="description" 
+                        type="text" 
+                        name="description" 
                         placeholder="Description" 
                         minlength="2"
                         maxlength="200"
                         required
                     />
-                    <span
-                        class="modal__error modal__error_description"
-                        id="profile-description-input-error">
-                    </span>
+                    <span class="modal__error" id="profile-description-input-error"></span>
                 </label>
                 <button type="submit" class="modal__button modal__button-disabled">Save</button>
             </form>
         </div>
     </div>
 
+    <!-- Modal para agregar nueva tarjeta -->
     <div class="modal" id="add-card-modal">
         <div class="modal__container">
             <button aria-label="Close" class="modal__close" id="add-modal-close" type="button"></button>
@@ -86,10 +93,7 @@
                         maxlength="30"
                         required
                     />
-                    <span
-                        class="modal__error"
-                        id="add-card-title-input-error">
-                    </span>
+                    <span class="modal__error" id="add-card-title-input-error"></span>
                 </label>
                 <label class="modal__label">
                     <input 
@@ -100,16 +104,14 @@
                         placeholder="Image URL"
                         required
                     />
-                    <span
-                        class="modal__error"
-                        id="add-card-url-input-error">
-                    </span>
+                    <span class="modal__error" id="add-card-url-input-error"></span>
                 </label>
                 <button class="modal__button modal__button-disabled" type="submit" disabled>Save</button>
             </form>
         </div>
     </div>
 
+    <!-- Modal para previsualizar tarjeta -->
     <div class="modal" id="modal__preview-card">
         <div class="modal__container modal__container-preview">
             <button class="modal__close modal__preview-close" id="popup-modal-close" type="button"></button>
@@ -117,19 +119,50 @@
             <p class="modal__preview-title"></p>
         </div>
     </div>
+
+    <div class="modal" id="change-avatar-modal">
+        <div class="modal__container">
+          <button aria-label="Close" class="modal__close" id="change-avatar-close" type="button"></button>
+          <h3 class="modal__heading">Change Profile Picture</h3>
+          <form class="modal__form" id="modal-form-avatar" name="avatar-form">
+            <label class="modal__label">
+              <input 
+                type="url" 
+                name="url" 
+                class="modal__input modal__input_type_url" 
+                id="avatar-url-input"
+                placeholder="Image URL"
+                required
+              />
+              <span class="modal__error" id="avatar-url-input-error"></span>
+            </label>
+            <button class="modal__button" type="submit">Save</button>
+          </form>
+        </div>
+      </div>
+      
+      
+    <!-- Modal de confirmación para eliminar tarjeta -->
+    <div class="modal" id="confirm-delete-modal">
+        <div class="modal__container">
+            <h3 class="modal__heading">Are you sure?</h3>
+            <button class="modal__button" type="button">Yes</button>
+            <button aria-label="Close" class="modal__close" type="button"></button>
+        </div>
+    </div>
     
-    
-    
+    <!-- Plantilla para las tarjetas -->
     <template id="card-template">
         <li class="card">
-          <img src="" alt="" class="card__image" />
-          <div class="card__description">
-            <h2 class="card__title"></h2>
-            <button aria-labelledby="Favorite" class="card__like-button" type="button"></button>
-          </div>
-          <button class="card__delete-button" type="button"></button>
+            <img class="card__image" src="" alt="">
+            <div class="card__description">
+                <h2 class="card__title"></h2>
+                <button class="card__like-button" aria-label="Like"></button>
+                <span class="card__like-count">0</span> <!-- Elemento para contar likes -->
+            </div>
+            <button class="card__delete-button" aria-label="Delete"></button>
         </li>
     </template>
-
+    
 </body>
 </html>
