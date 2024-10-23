@@ -41,7 +41,6 @@ export default class Api {
         })
         .then(this._checkResponse);
     }
-    
 
     // Crear una nueva tarjeta
     createCard(data) {
@@ -62,6 +61,7 @@ export default class Api {
 
     // Añadir un like a una tarjeta
     addLike(cardId) {
+        console.log(`Adding like to card: ${cardId}`);  // Log de depuración
         return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
             method: 'PUT',
             headers: this._headers
@@ -70,6 +70,7 @@ export default class Api {
 
     // Quitar un like de una tarjeta
     removeLike(cardId) {
+        console.log(`Removing like from card: ${cardId}`);  // Log de depuración
         return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
             method: 'DELETE',
             headers: this._headers
@@ -78,6 +79,7 @@ export default class Api {
 
     // Método para revisar la respuesta del servidor
     _checkResponse(res) {
+        console.log("Response status:", res.status);  // Log para depuración
         if (res.ok) {
             return res.json();
         }

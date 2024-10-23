@@ -10,26 +10,22 @@
 <body class="page">
     <div class="page__content">
         <header class="header page__section">
-            <img 
-            src="<%=require('./images/logo.svg')%>"
-            alt="Around the U.S. logo" 
-            class="header__logo"/>
+            <img alt="Around the U.S. logo" class="header__logo"/> <!-- Webpack se encargará de la ruta -->
         </header>
         <main class="content">
             <section class="profile page__section">
                 <div class="profile__image-container">
-                    <img src="<%=require('./images/jacques-cousteau.png')%>" alt="Avatar" class="profile__image">
-                    <!-- Icono de edición que aparece en hover -->
+                    <img alt="Avatar" class="profile__image"> <!-- Webpack se encargará de la ruta -->
                     <button class="profile__edit-image-button">
-                        <img src="<%=require('./images/Edit_pencil.svg')%>" alt="Edit Icon" class="profile__edit-image-icon">
+                        <img alt="Edit Icon" class="profile__edit-image-icon"> <!-- Webpack se encargará de la ruta -->
                     </button>
                 </div>
                 <div class="profile__info">
                     <h1 class="profile__title" id="profile-title">Jacques Cousteau</h1>
-                    <button aria-label="Edit" class="profile__edit-button" type="button"></button> <!-- Botón para abrir popup de editar perfil -->
+                    <button aria-label="Edit" class="profile__edit-button" type="button"></button>
                     <p class="profile__description" id="profile-description">Explorer</p>
                 </div>
-                <button aria-label="Add" class="profile__add-button" type="button"></button> <!-- Botón para abrir popup de agregar tarjeta -->
+                <button aria-label="Add" class="profile__add-button" type="button"></button>
             </section>
             <section class="cards page__section">
                 <ul class="cards__list"></ul>
@@ -71,7 +67,7 @@
                     />
                     <span class="modal__error" id="profile-description-input-error"></span>
                 </label>
-                <button type="submit" class="modal__button modal__button-disabled">Save</button>
+                <button type="submit" class="modal__button modal__button_disabled" disabled>Save</button>
             </form>
         </div>
     </div>
@@ -106,7 +102,7 @@
                     />
                     <span class="modal__error" id="add-card-url-input-error"></span>
                 </label>
-                <button class="modal__button modal__button-disabled" type="submit" disabled>Save</button>
+                <button class="modal__button modal__button_disabled" type="submit" disabled>Save</button>
             </form>
         </div>
     </div>

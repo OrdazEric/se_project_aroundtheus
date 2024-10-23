@@ -1,4 +1,15 @@
+// Importamos las imágenes
 import "../pages/index.css";
+import logo from '../images/logo.svg';
+import avatar from '../images/jacques-cousteau.png';
+import editIcon from '../images/Edit_pencil.svg';
+
+// Asignamos las imágenes a los elementos HTML correspondientes
+document.querySelector('.header__logo').src = logo;
+document.querySelector('.profile__image').src = avatar;
+document.querySelector('.profile__edit-image-icon').src = editIcon;
+
+// Importamos los módulos y clases necesarios
 import { 
     cardListEl,
     editProfileForm,
@@ -32,11 +43,11 @@ export const api = new Api({
 });
 
 // Instanciamos la clase UserInfo para manejar el perfil
-const userInfo = new UserInfo(profileTitle, profileDescription);
+const userInfo = new UserInfo(profileTitle, profileDescription, document.querySelector('.profile__image'));
 
 // Cargar la información del usuario y las tarjetas al iniciar la aplicación
 api.getUserInfo().then(userData => {
-    userInfo.setUserInfo(userData.name, userData.about); // Actualiza el nombre y la descripción
+    userInfo.setUserInfo(userData); // Actualiza el nombre, descripción y guarda el ID
     document.querySelector('.profile__image').src = userData.avatar; // Actualiza la imagen de perfil
 }).catch(err => console.error('Error loading user info:', err));
 
@@ -62,7 +73,19 @@ api.getInitialCards().then(cardsData => {
 
 // Función para crear una tarjeta
 function createCard(cardData) {
-    const card = new Card(cardData, "#card-template", handleImageClick, handleDeleteCard);
+    const card = new Card(
+        {
+            name: cardData.name,
+            link: cardData.link,
+            _id: cardData._id,
+            likes: cardData.likes,
+            owner: cardData.owner
+        },
+        "#card-template", 
+        handleImageClick, 
+        handleDeleteCard,
+        userInfo.getUserId() // Obtenemos el ID del usuario actual para gestionar los likes
+    );
     const cardElement = card.getView();
     return cardElement;
 }
@@ -83,7 +106,7 @@ function handleProfileFormSubmit(userData) {
 
     api.setUserInfo({ name: title, about: description })
         .then(updatedData => {
-            userInfo.setUserInfo(updatedData.name, updatedData.about); // Actualizamos los datos en el DOM
+            userInfo.setUserInfo(updatedData); // Actualizamos los datos en el DOM
             profileModal.close();  // Cerrar el modal
         })
         .catch(err => console.error('Error updating profile:', err));
@@ -152,12 +175,25 @@ function handleDeleteCard(cardId, cardElement) {
     });
 }
 
+// Función para validar URL
+function isValidUrl(url) {
+    const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocolo
+        '((([a-zA-Z0-9$-_@.&+!*\\(\\),]|(%[0-9a-fA-F]{2}))+)+)'+ // dominio
+        '(\\:[0-9]{2,5})?' + // puerto (opcional)
+        '(\\/[-a-zA-Z0-9()@:%_+.~#?&/=]*)?$', 'i');
+    return !!urlPattern.test(url);
+}
+
+// Validación del formulario de avatar
+const avatarFormValidator = new FormValidator(formValidationSettings, document.querySelector('#modal-form-avatar'));
+avatarFormValidator.enableValidation();
+
 // Evento para abrir el modal de cambio de imagen de perfil
 const editAvatarButton = document.querySelector('.profile__edit-image-button'); // Botón para editar imagen de perfil
 const changeAvatarModal = new PopupWithForm("#change-avatar-modal", (inputData) => {
     const avatarUrl = inputData.url; // Obtenemos el valor del campo con name="url"
 
-    if (avatarUrl) {
+    if (isValidUrl(avatarUrl)) {  // Aseguramos que la URL sea válida
         // Enviamos la URL a la API
         api.setUserAvatar(avatarUrl)
             .then((updatedUser) => {
@@ -166,7 +202,8 @@ const changeAvatarModal = new PopupWithForm("#change-avatar-modal", (inputData) 
             })
             .catch(err => console.error('Error updating avatar:', err));
     } else {
-        console.error('URL no válida.');  // Este mensaje aparece solo si el campo está vacío
+        console.error('URL no válida.');  // Mensaje si la URL no es válida
+        avatarFormValidator._showInputError(document.querySelector('#avatar-url-input')); // Mostramos error en el campo
     }
 });
 

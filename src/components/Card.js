@@ -1,14 +1,17 @@
 import { api } from '../pages/index.js';  // Aseguramos que api esté disponible en Card.js
 
 export default class Card {
-    constructor({ name, link, _id, likes = [] }, cardSelector, handleImageClick, handleDeleteCard) {
+    constructor({ name, link, _id, likes = 0, owner }, cardSelector, handleImageClick, handleDeleteCard, currentUserId) {
         this._name = name;
         this._link = link;
         this._id = _id;
-        this._likes = likes;
+        this._likesCount = likes;  // Inicializamos el contador con el valor inicial de likes (si existe)
+        this._owner = owner;
         this._cardSelector = cardSelector;
         this._handleImageClick = handleImageClick;
         this._handleDeleteCard = handleDeleteCard;
+        this._currentUserId = currentUserId;
+        this._isLiked = false;  // Estado del like inicial
     }
 
     _getTemplate() {
@@ -20,29 +23,40 @@ export default class Card {
         return cardTemplate;
     }
 
+    // Manejo de likes
     _handleLikeIcon() {
-        const isLiked = this._likeButton.classList.contains("card__like-button_active");
-
-        if (isLiked) {
+        if (this._isLiked) {
+            // Si el usuario ya ha dado like, lo elimina
             api.removeLike(this._id)
-                .then(updatedCard => {
-                    this._likes = updatedCard.likes || [];  // Aseguramos que `likes` siempre sea un array
+                .then(() => {
+                    console.log("Like removed.");
+                    if (this._likesCount > 0) {
+                        this._likesCount--;  // Disminuimos el contador de likes
+                    }
+                    this._isLiked = false;  // El usuario ha quitado su like
                     this._updateLikesView();
                 })
                 .catch(err => console.error("Error removing like:", err));
         } else {
+            // Si el usuario no ha dado like, lo añade
             api.addLike(this._id)
-                .then(updatedCard => {
-                    this._likes = updatedCard.likes || [];  // Aseguramos que `likes` siempre sea un array
+                .then(() => {
+                    console.log("Like added.");
+                    this._likesCount++;  // Aumentamos el contador de likes
+                    this._isLiked = true;  // El usuario ha dado like
                     this._updateLikesView();
                 })
                 .catch(err => console.error("Error adding like:", err));
         }
     }
 
+    // Actualización de la vista de likes
     _updateLikesView() {
-        this._likeCountElement.textContent = this._likes.length || 0;  // Aseguramos que `length` sea válido
-        this._likeButton.classList.toggle("card__like-button_active", this._likes.some(like => like._id === userInfo.getUserId()));
+        console.log("Updating likes view. Total likes:", this._likesCount);  // Log para depuración
+        this._likeCountElement.textContent = this._likesCount;  // Actualizamos el contador manualmente
+
+        // Cambiar el estado del botón según si el usuario ha dado like
+        this._likeButton.classList.toggle("card__like-button_active", this._isLiked);
     }
 
     _setEventListeners() {
@@ -63,8 +77,8 @@ export default class Card {
         this._cardImage.alt = this._name;
         this._element.querySelector(".card__title").textContent = this._name;
 
-        this._updateLikesView(); // Actualizamos los likes
-        this._setEventListeners(); // Configuramos los eventos
+        this._updateLikesView();  // Actualizamos la vista al cargar
+        this._setEventListeners();  // Configuramos los eventos
 
         return this._element;
     }
