@@ -1,17 +1,14 @@
-// Importamos las imágenes
+// Importamos estilos e imágenes
 import "../pages/index.css";
 import logo from '../images/logo.svg';
 import avatar from '../images/jacques-cousteau.png';
 import editIcon from '../images/Edit_pencil.svg';
 
-// Asignamos las imágenes a los elementos HTML correspondientes
 document.querySelector('.header__logo').src = logo;
 document.querySelector('.profile__image').src = avatar;
 document.querySelector('.profile__edit-image-icon').src = editIcon;
 
-// Importamos los módulos y clases necesarios
 import { 
-    cardListEl,
     editProfileForm,
     addCardForm,
     addCardButton,
@@ -20,8 +17,7 @@ import {
     profileDescription,
     nameInput,
     descriptionInput,
-    formValidationSettings,
-    initialCards
+    formValidationSettings
 } from "../utils/constants.js";
 
 import FormValidator from "../components/FormValidator.js";
@@ -33,200 +29,103 @@ import UserInfo from "../components/UserInfo.js";
 import Section from "../components/Section.js";
 import Api from "../components/Api.js";
 
-// Instanciamos la API
-export const api = new Api({
+const api = new Api({
     baseUrl: 'https://around-api.en.tripleten-services.com/v1',
     headers: {
-        authorization: "617ef1c4-25f8-484a-be24-12bfa6baeeeb",
+        authorization: "77f6fa17-673a-40ba-89df-6b222f24f8b5",
         'Content-Type': 'application/json'
     }
 });
 
-// Recuperar datos del perfil de localStorage o cargar valores predeterminados
-function loadUserInfo() {
-    const savedUserInfo = localStorage.getItem('userInfo');
-    if (savedUserInfo) {
-        return JSON.parse(savedUserInfo);  // Si hay datos en localStorage, los usamos
-    } else {
-        // Valores predeterminados
-        return {
-            name: "Jacques Cousteau",  // Nombre por defecto
-            about: "Explorer",  // Descripción por defecto
-            avatar: avatar  // Imagen por defecto
-        };
-    }
-}
-
-// Guardar los datos del perfil en localStorage
-function saveUserInfo(userData) {
-    localStorage.setItem('userInfo', JSON.stringify(userData));  // Guardamos en localStorage
-}
-
-// Inicializamos la clase UserInfo
 const userInfo = new UserInfo(profileTitle, profileDescription, document.querySelector('.profile__image'));
-const initialUserInfo = loadUserInfo();  // Cargamos los datos iniciales (localStorage o predeterminados)
-userInfo.setUserInfo(initialUserInfo);  // Establecemos la información en el DOM
 
-// Cargar información del usuario desde la API o usar datos locales
-api.getUserInfo().then(userData => {
-    userInfo.setUserInfo(userData);  // Actualizamos desde la API
-    saveUserInfo(userData);  // Guardamos los datos de la API en localStorage
-}).catch(err => {
-    console.error('Error loading user info, using local data:', err);
-});
+// Inicializar perfil
+api.getUserInfo()
+    .then(userData => {
+        userInfo.setUserInfo(userData);
+        userInfo.setAvatar(userData.avatar); 
+    })
+    .catch(err => console.error('Error loading user info:', err));
 
-// Inicializamos la sección con las tarjetas predeterminadas o las de localStorage
-function loadCards() {
-    const savedCards = localStorage.getItem('cards');
-    return savedCards ? JSON.parse(savedCards) : initialCards;  // Si no hay en localStorage, usamos las predeterminadas
-}
-
-function saveCards(cards) {
-    localStorage.setItem('cards', JSON.stringify(cards));  // Guardamos las tarjetas en localStorage
-}
-
-// Inicializamos las tarjetas desde localStorage o constantes
-let section = new Section(
+// Crear cards
+const section = new Section(
     {
-        items: loadCards(),
-        renderer: createCard
+        items: [],
+        renderer: (cardData) => {
+            const cardElement = createCard(cardData);
+            if (cardElement) {
+                section.addItem(cardElement);
+            }
+        }
     },
     ".cards__list"
 );
 
-// Renderizamos las tarjetas cargadas
-section.renderItems();
+api.getInitialCards()
+    .then(cardsData => {
+        cardsData.forEach(cardData => {
+            const cardElement = createCard(cardData);
+            if (cardElement) {
+                section.addItem(cardElement);
+            }
+        });
+    })
+    .catch(err => console.error('Error loading cards from API:', err));
 
-// Luego, intentamos cargar y renderizar las tarjetas obtenidas de la API
-api.getInitialCards().then(cardsData => {
-    section.renderItems();
-    cardsData.forEach(cardData => {
-        const cardElement = createCard(cardData);
-        section.addItem(cardElement);  // Agregamos las tarjetas obtenidas de la API
-    });
-    saveCards(cardsData);  // Guardamos las tarjetas de la API en localStorage
-}).catch(err => {
-    console.error('Error loading cards from API, using local cards:', err);
-});
-
-// Función para crear una tarjeta
 function createCard(cardData) {
-    const card = new Card(
-        {
-            name: cardData.name,
-            link: cardData.link,
-            _id: cardData._id,
-            likes: cardData.likes,
-            owner: cardData.owner
-        },
-        "#card-template", 
-        handleImageClick, 
-        handleDeleteCard,
-        userInfo.getUserId()  // Obtenemos el ID del usuario actual para gestionar los likes
-    );
-    const cardElement = card.getView();
-    return cardElement;
+    const card = new Card({
+        cardData,
+        cardSelector: "#card-template",
+        handleImageClick,
+        handleDeleteClick: (cardId, cardElement) => handleDeleteCard(cardId, cardElement),
+        userId: userInfo.getUserInfo()._id,
+        handleLikeButton: (cardId, isLiked) => handleLikeClick(cardId, isLiked)
+    });
+    return card.getView();
 }
 
-// Definimos `handleImageClick` para abrir el popup con la imagen de la tarjeta
-function handleImageClick(cardData) {
-    imageModal.open(cardData); // Abrimos el popup de imagen
-}
-
-// Popup de imagen para las tarjetas
 const imageModal = new PopupWithImage("#modal__preview-card");
 imageModal.setEventListeners();
 
-// Función para manejar el envío del formulario de editar perfil
-function handleProfileFormSubmit(userData) {
-    const title = userData.title;
-    const description = userData.description;
-
-    api.setUserInfo({ name: title, about: description })
-        .then(updatedData => {
-            userInfo.setUserInfo(updatedData); // Actualizamos los datos en el DOM
-            saveUserInfo(updatedData);  // Guardamos los datos en localStorage
-            profileModal.close();  // Cerrar el modal
-        })
-        .catch(err => console.error('Error updating profile:', err));
+function handleImageClick(cardData) {
+    imageModal.open(cardData);
 }
 
-// Validación del formulario de edición del perfil
-const profileFormValidator = new FormValidator(formValidationSettings, editProfileForm);
-profileFormValidator.enableValidation();
+const profileModal = new PopupWithForm("#profile-edit-modal", (data) => {
+    profileModal.renderLoading(true);
+    api.setUserInfo({ name: data.title, about: data.description })
+        .then(updatedData => {
+            userInfo.setUserInfo(updatedData);
+            profileModal.close();
+        })
+        .catch(err => console.error("Error updating profile:", err))
+        .finally(() => profileModal.renderLoading(false));
+});
 
-// Popup para editar el perfil
-const profileModal = new PopupWithForm("#profile-edit-modal", handleProfileFormSubmit);
 profileModal.setEventListeners();
 
-// Evento para abrir el popup de editar perfil
 profileEditButton.addEventListener("click", () => {
     const userData = userInfo.getUserInfo();
-    nameInput.value = userData.title;
-    descriptionInput.value = userData.description;
+    nameInput.value = userData.name;
+    descriptionInput.value = userData.about;
     profileModal.open();
 });
 
-// Función para manejar el popup de cambio de avatar
-const editAvatarButton = document.querySelector('.profile__edit-image-button'); // Botón para cambiar el avatar
-const avatarForm = document.querySelector('#modal-form-avatar');  // Formulario de cambio de avatar
-
-const avatarFormValidator = new FormValidator(formValidationSettings, avatarForm);
-avatarFormValidator.enableValidation();
-
-// Popup para cambiar el avatar
-const avatarModal = new PopupWithForm('#change-avatar-modal', (inputData) => {
-    api.setUserAvatar(inputData.url)
-        .then((updatedUser) => {
-            userInfo.setAvatar(updatedUser.avatar);  // Actualiza el avatar en el DOM
-            saveUserInfo(updatedUser);  // Guarda en localStorage
-            avatarModal.close();  // Cierra el popup
-        })
-        .catch(err => console.error('Error updating avatar:', err));
-});
-
-editAvatarButton.addEventListener('click', () => {
-    avatarModal.open();
-});
-
-avatarModal.setEventListeners();
-
-// Función para manejar el envío del formulario de agregar tarjeta
-function handleAddCardFormSubmit(inputData) {
-    const cardData = {
-        name: inputData.title,
-        link: inputData.url,
-    };
-
-    api.createCard(cardData)
-        .then((newCard) => {
-            const newCardElement = createCard(newCard);
-            section.addItem(newCardElement);
+const newCardModal = new PopupWithForm("#add-card-modal", (data) => {
+    newCardModal.renderLoading(true);
+    api.createCard({ name: data.title, link: data.url })
+        .then((newCardData) => {
+            const cardElement = createCard(newCardData);
+            section.addItem(cardElement);
             newCardModal.close();
-            addCardForm.reset();
-            addCardFormValidator.disableSubmitButton();
-
-            // Guardar en localStorage las nuevas tarjetas
-            const currentCards = loadCards();
-            saveCards([...currentCards, newCard]);
         })
-        .catch((err) => console.error("Error creating card:", err));
-}
-
-// Validación del formulario de agregar tarjeta
-const addCardFormValidator = new FormValidator(formValidationSettings, addCardForm);
-addCardFormValidator.enableValidation();
-
-// Popup para agregar nuevas tarjetas
-const newCardModal = new PopupWithForm("#add-card-modal", handleAddCardFormSubmit);
-newCardModal.setEventListeners();
-
-// Evento para abrir el modal de agregar tarjeta
-addCardButton.addEventListener("click", () => {
-    newCardModal.open();
+        .catch(err => console.error("Error creating card:", err))
+        .finally(() => newCardModal.renderLoading(false));
 });
 
-// Popup de confirmación para eliminar una tarjeta
+newCardModal.setEventListeners();
+addCardButton.addEventListener("click", () => newCardModal.open());
+
 const deleteCardPopup = new PopupWithConfirmation("#confirm-delete-modal");
 deleteCardPopup.setEventListeners();
 
@@ -234,14 +133,42 @@ function handleDeleteCard(cardId, cardElement) {
     deleteCardPopup.open(() => {
         api.deleteCard(cardId)
             .then(() => {
-                cardElement.remove();  // Eliminamos el elemento del DOM
+                cardElement.remove();
                 deleteCardPopup.close();
-
-                // Guardar en localStorage después de eliminar
-                const currentCards = loadCards();
-                const updatedCards = currentCards.filter(card => card._id !== cardId);
-                saveCards(updatedCards);
             })
-            .catch(err => console.error('Error deleting card:', err));
+            .catch(err => console.error("Error deleting card:", err));
     });
 }
+
+const avatarModal = new PopupWithForm("#change-avatar-modal", (data) => {
+    avatarModal.renderLoading(true);
+    api.changeAvatar(data.url)
+        .then((updatedData) => {
+            userInfo.setAvatar(updatedData.avatar);
+            avatarModal.close();
+        })
+        .catch((err) => console.error("Error updating avatar:", err))
+        .finally(() => avatarModal.renderLoading(false));
+});
+
+avatarModal.setEventListeners();
+
+document.querySelector(".profile__edit-image-button").addEventListener("click", () => {
+    avatarModal.open();
+});
+
+function handleLikeClick(cardId, isLiked) {
+    if (isLiked) {
+        api.removeLike(cardId)
+            .catch(err => console.error("Error removing like:", err));
+    } else {
+        api.addLike(cardId)
+            .catch(err => console.error("Error adding like:", err));
+    }
+}
+
+const profileFormValidator = new FormValidator(formValidationSettings, editProfileForm);
+const addCardFormValidator = new FormValidator(formValidationSettings, addCardForm);
+
+profileFormValidator.enableValidation();
+addCardFormValidator.enableValidation();

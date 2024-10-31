@@ -1,88 +1,71 @@
 export default class Api {
-    constructor({ baseUrl, headers }) {
-        this._baseUrl = baseUrl;
-        this._headers = headers;
+    constructor(options) {
+      this._baseUrl = options.baseUrl;
+      this._headers = options.headers;
     }
-
-    // Obtener las tarjetas iniciales
-    getInitialCards() {
-        return fetch(`${this._baseUrl}/cards`, {
-            headers: this._headers
-        }).then(this._checkResponse);
+  
+    _processResponse(res) {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Error: ${res.status}`);
     }
-
-    // Obtener la información del usuario
+  
     getUserInfo() {
-        return fetch(`${this._baseUrl}/users/me`, {
-            headers: this._headers
-        }).then(this._checkResponse);
+      return fetch(`${this._baseUrl}/users/me`, {
+        headers: this._headers,
+      }).then(this._processResponse);
     }
-
-    // Actualizar la información del usuario
-    setUserInfo(data) {
-        return fetch(`${this._baseUrl}/users/me`, {
-            method: 'PATCH',
-            headers: this._headers,
-            body: JSON.stringify({
-                name: data.name,
-                about: data.about
-            })
-        }).then(this._checkResponse);
+  
+    setUserInfo({ name, about }) {
+      return fetch(`${this._baseUrl}/users/me`, {
+        method: "PATCH",
+        headers: this._headers,
+        body: JSON.stringify({ name, about }),
+      }).then(this._processResponse);
     }
-
-    // Actualizar el avatar del usuario
-    setUserAvatar(avatarUrl) {
-        return fetch(`${this._baseUrl}/users/me/avatar`, {
-            method: 'PATCH',
-            headers: this._headers,
-            body: JSON.stringify({
-                avatar: avatarUrl  // Asegúrate de enviar el campo "avatar"
-            })
-        })
-        .then(this._checkResponse);
+  
+    getInitialCards() {
+      return fetch(`${this._baseUrl}/cards`, {
+        headers: this._headers,
+      }).then(this._processResponse);
     }
-
-    // Crear una nueva tarjeta
-    createCard(data) {
-        return fetch(`${this._baseUrl}/cards`, {
-            method: 'POST',
-            headers: this._headers,
-            body: JSON.stringify(data)
-        }).then(this._checkResponse);
+  
+    createCard({ name, link }) {
+      return fetch(`${this._baseUrl}/cards`, {
+        method: "POST",
+        headers: this._headers,
+        body: JSON.stringify({ name, link }),
+      }).then(this._processResponse);
     }
-
-    // Eliminar una tarjeta
+  
     deleteCard(cardId) {
-        return fetch(`${this._baseUrl}/cards/${cardId}`, {
-            method: 'DELETE',
-            headers: this._headers
-        }).then(this._checkResponse);
+      return fetch(`${this._baseUrl}/cards/${cardId}`, {
+        method: "DELETE",
+        headers: this._headers,
+      }).then(this._processResponse);
     }
-
-    // Añadir un like a una tarjeta
+  
     addLike(cardId) {
-        console.log(`Adding like to card: ${cardId}`);  // Log de depuración
-        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-            method: 'PUT',
-            headers: this._headers
-        }).then(this._checkResponse);
+      return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+        method: "PUT",
+        headers: this._headers,
+      }).then(this._processResponse);
     }
-
-    // Quitar un like de una tarjeta
+  
     removeLike(cardId) {
-        console.log(`Removing like from card: ${cardId}`);  // Log de depuración
-        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-            method: 'DELETE',
-            headers: this._headers
-        }).then(this._checkResponse);
+      return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+        method: "DELETE",
+        headers: this._headers,
+      }).then(this._processResponse);
     }
-
-    // Método para revisar la respuesta del servidor
-    _checkResponse(res) {
-        console.log("Response status:", res.status);  // Log para depuración
-        if (res.ok) {
-            return res.json();
-        }
-        return Promise.reject(`Error: ${res.status}`);
+  
+    changeAvatar(avatarUrl) {
+      return fetch(`${this._baseUrl}/users/me/avatar`, {
+        method: "PATCH",
+        headers: this._headers,
+        body: JSON.stringify({ avatar: avatarUrl }),
+      }).then(this._processResponse);
     }
-}
+  }
+  

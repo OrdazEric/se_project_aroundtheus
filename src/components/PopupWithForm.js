@@ -3,12 +3,13 @@ import Popup from "./Popup.js";
 export default class PopupWithForm extends Popup {
   constructor(popupSelector, handleFormSubmit) {
     super(popupSelector);
-    this._modalForm = this._modalElement.querySelector(".modal__form");
+    this._popupForm = this._modalElement.querySelector(".modal__form");
     this._handleFormSubmit = handleFormSubmit;
-    this._inputList = this._modalForm.querySelectorAll(".modal__input");
+    this._submitButton = this._popupForm.querySelector(".modal__button");
+    this._submitButtonText = this._submitButton.textContent;
+    this._inputList = this._popupForm.querySelectorAll(".modal__input");
   }
 
-  // Obtener los valores de los inputs del formulario
   _getInputValues() {
     this._formValues = {};
     this._inputList.forEach((input) => {
@@ -17,25 +18,26 @@ export default class PopupWithForm extends Popup {
     return this._formValues;
   }
 
-  // Establecer valores en los inputs
   setInputValues(data) {
     this._inputList.forEach((input) => {
       input.value = data[input.name];
     });
   }
 
-  // Escuchadores de eventos
   setEventListeners() {
-    super.setEventListeners();
-    this._modalForm.addEventListener("submit", (evt) => {
+    this._popupForm.addEventListener("submit", (evt) => {
       evt.preventDefault();
       this._handleFormSubmit(this._getInputValues());
     });
+    super.setEventListeners();
   }
 
-  // Método para cerrar el popup y resetear el formulario
+  renderLoading(isLoading) {
+    this._submitButton.textContent = isLoading ? "Saving..." : this._submitButtonText;
+  }
+
   close() {
-    this._modalForm.reset();
+    this._popupForm.reset();
     super.close();
   }
 }

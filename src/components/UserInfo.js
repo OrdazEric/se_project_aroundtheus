@@ -1,26 +1,22 @@
 export default class UserInfo {
-  constructor(nameElement, aboutElement, avatarElement) {
+  constructor(nameElement, descriptionElement, avatarElement) {
     this._nameElement = nameElement;
-    this._aboutElement = aboutElement;
+    this._descriptionElement = descriptionElement;
     this._avatarElement = avatarElement;
-  }
-
-  setUserInfo({ name, about, _id }) {
-    this._nameElement.textContent = name;
-    this._aboutElement.textContent = about;
-    this._userId = _id;  // Guardamos el ID del usuario
   }
 
   getUserInfo() {
     return {
-      title: this._nameElement.textContent,
-      description: this._aboutElement.textContent,
-      _id: this._userId,  // Retornamos el ID del usuario junto a los datos
+      name: this._nameElement.textContent,
+      about: this._descriptionElement.textContent,
+      id: this._id,
     };
   }
 
-  getUserId() {
-    return this._userId;  // Devolvemos el ID del usuario almacenado
+  setUserInfo({ name, about, _id }) {
+    this._nameElement.textContent = name;
+    this._descriptionElement.textContent = about;
+    this._id = _id;
   }
 
   setAvatar(avatarUrl) {
