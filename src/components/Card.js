@@ -2,10 +2,10 @@ export default class Card {
     constructor({ cardData, cardSelector, handleImageClick, handleDeleteClick, userId, handleLikeButton }) {
         this._name = cardData.name;
         this._link = cardData.link;
-        this._isLiked = cardData.isLiked || false;
+        this._isLiked = cardData.isLiked; // Usa isLiked directamente de los datos de la API
         this._cardId = cardData._id;
         this._userId = userId;
-        this._ownerId = cardData.owner._id;
+        this._ownerId = cardData.owner ? cardData.owner._id : null; // Verificación de owner
         this._handleImageClick = handleImageClick;
         this._handleDeleteClick = handleDeleteClick;
         this._cardSelector = cardSelector;
@@ -20,13 +20,10 @@ export default class Card {
         return cardElement;
     }
 
-    _toggleLike() {
-        this._likeButton.classList.toggle("card__like-button_active");
-    }
-
+    // Actualizar el estado visual del like
     updateLikes(isLiked) {
         this._isLiked = isLiked;
-        this._toggleLike();
+        this._likeButton.classList.toggle("card__like-button_active", this._isLiked);
     }
 
     _setEventListeners() {
@@ -35,9 +32,11 @@ export default class Card {
         });
 
         this._likeButton.addEventListener("click", () => {
-            this._isLiked = !this._isLiked;
-            this._handleLikeButton(this._cardId, this._isLiked);
-            this.updateLikes(this._isLiked);
+            this._handleLikeButton(this._cardId, this._isLiked)
+                .then(isLiked => {
+                    this.updateLikes(isLiked);
+                })
+                .catch(err => console.error("Error updating like:", err));
         });
 
         if (this._userId === this._ownerId) {
@@ -61,7 +60,10 @@ export default class Card {
         this._cardTitle.textContent = this._name;
 
         this._setEventListeners();
-        if (this._isLiked) this._toggleLike();
+
+        // Reflejar el estado inicial del "like" en el botón
+        if (this._isLiked) this._likeButton.classList.add("card__like-button_active");
+
         return this._element;
     }
 }

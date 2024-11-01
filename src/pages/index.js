@@ -63,6 +63,7 @@ const section = new Section(
 
 api.getInitialCards()
     .then(cardsData => {
+        console.log("Cards data from API:", cardsData); // Agrega esto para verificar la estructura en la consola
         cardsData.forEach(cardData => {
             const cardElement = createCard(cardData);
             if (cardElement) {
@@ -71,6 +72,7 @@ api.getInitialCards()
         });
     })
     .catch(err => console.error('Error loading cards from API:', err));
+
 
 function createCard(cardData) {
     const card = new Card({
@@ -158,14 +160,12 @@ document.querySelector(".profile__edit-image-button").addEventListener("click", 
 });
 
 function handleLikeClick(cardId, isLiked) {
-    if (isLiked) {
-        api.removeLike(cardId)
-            .catch(err => console.error("Error removing like:", err));
-    } else {
-        api.addLike(cardId)
-            .catch(err => console.error("Error adding like:", err));
-    }
+    return isLiked
+        ? api.removeLike(cardId).then(() => false) // Devuelve false cuando se remueve el like
+        : api.addLike(cardId).then(() => true); // Devuelve true cuando se agrega el like
 }
+
+
 
 const profileFormValidator = new FormValidator(formValidationSettings, editProfileForm);
 const addCardFormValidator = new FormValidator(formValidationSettings, addCardForm);

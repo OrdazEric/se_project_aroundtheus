@@ -118,10 +118,20 @@
   border-radius: 2%;
 }
 
+/* Botón deshabilitado */
+.button--disabled,
 .popup__button_disabled {
-  background-color: #ffffff;
+  background-color: #ccc; /* Color gris para indicar deshabilitado */
   color: rgba(0, 0, 0, 0.2);
-  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none; /* Evita que el botón responda al hover y al clic */
+}
+
+/* Hover solo en estado habilitado */
+.popup__submit:not(.button--disabled):hover {
+  opacity: 0.8;
+  cursor: pointer;
 }
 
 .popup__submit:hover {

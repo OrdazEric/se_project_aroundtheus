@@ -18,10 +18,23 @@ export default class PopupWithForm extends Popup {
     return this._formValues;
   }
 
+  // Modificación para verificar la validez del formulario completo
+  _toggleSubmitButtonState() {
+    const isFormValid = this._popupForm.checkValidity();
+    if (isFormValid) {
+      this._submitButton.removeAttribute("disabled");
+      this._submitButton.classList.remove("button--disabled");
+    } else {
+      this._submitButton.setAttribute("disabled", "true");
+      this._submitButton.classList.add("button--disabled");
+    }
+  }
+
   setInputValues(data) {
     this._inputList.forEach((input) => {
       input.value = data[input.name];
     });
+    this._toggleSubmitButtonState(); // Asegura que el botón esté en el estado correcto al abrir el popup
   }
 
   setEventListeners() {
@@ -29,6 +42,12 @@ export default class PopupWithForm extends Popup {
       evt.preventDefault();
       this._handleFormSubmit(this._getInputValues());
     });
+    
+    // Listener para verificar el estado del botón en cada cambio de input
+    this._inputList.forEach((input) => {
+      input.addEventListener("input", () => this._toggleSubmitButtonState());
+    });
+
     super.setEventListeners();
   }
 
@@ -38,6 +57,8 @@ export default class PopupWithForm extends Popup {
 
   close() {
     this._popupForm.reset();
+    this._toggleSubmitButtonState(); // Asegura que el botón vuelva a estar deshabilitado
     super.close();
-  }
+}
+
 }
