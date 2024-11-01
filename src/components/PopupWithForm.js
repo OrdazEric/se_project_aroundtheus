@@ -8,6 +8,9 @@ export default class PopupWithForm extends Popup {
     this._submitButton = this._popupForm.querySelector(".modal__button");
     this._submitButtonText = this._submitButton.textContent;
     this._inputList = this._popupForm.querySelectorAll(".modal__input");
+
+    console.log("Formulario seleccionado:", this._popupForm); // Verifica si se selecciona el formulario
+    console.log("Botón de submit seleccionado:", this._submitButton); // Verifica si el botón es seleccionado
   }
 
   _getInputValues() {
@@ -18,15 +21,15 @@ export default class PopupWithForm extends Popup {
     return this._formValues;
   }
 
-  // Modificación para verificar la validez del formulario completo
+  // Función para habilitar o deshabilitar el botón de envío
   _toggleSubmitButtonState() {
     const isFormValid = this._popupForm.checkValidity();
     if (isFormValid) {
       this._submitButton.removeAttribute("disabled");
-      this._submitButton.classList.remove("button--disabled");
+      this._submitButton.classList.remove("modal__button_disabled");
     } else {
       this._submitButton.setAttribute("disabled", "true");
-      this._submitButton.classList.add("button--disabled");
+      this._submitButton.classList.add("modal__button_disabled");
     }
   }
 
@@ -40,10 +43,11 @@ export default class PopupWithForm extends Popup {
   setEventListeners() {
     this._popupForm.addEventListener("submit", (evt) => {
       evt.preventDefault();
+      console.log("Formulario enviado"); // Verificar que el envío se activa
       this._handleFormSubmit(this._getInputValues());
     });
-    
-    // Listener para verificar el estado del botón en cada cambio de input
+
+    // Detecta cambios en los inputs para actualizar el estado del botón
     this._inputList.forEach((input) => {
       input.addEventListener("input", () => this._toggleSubmitButtonState());
     });
@@ -51,14 +55,18 @@ export default class PopupWithForm extends Popup {
     super.setEventListeners();
   }
 
-  renderLoading(isLoading) {
-    this._submitButton.textContent = isLoading ? "Saving..." : this._submitButtonText;
+  renderLoading(isLoading, loadingText = "Saving...") {
+    this._submitButton.textContent = isLoading ? loadingText : this._submitButtonText;
+  }
+
+  open() {
+    super.open();
+    this._toggleSubmitButtonState(); // Restablece el estado del botón al abrir el modal
   }
 
   close() {
     this._popupForm.reset();
-    this._toggleSubmitButtonState(); // Asegura que el botón vuelva a estar deshabilitado
+    this._toggleSubmitButtonState(); // Restablece el estado del botón al cerrar el modal
     super.close();
-}
-
+  }
 }

@@ -47,7 +47,7 @@ api.getUserInfo()
     })
     .catch(err => console.error('Error loading user info:', err));
 
-// Crear cards
+// Crear cards usando el método renderItems de Section
 const section = new Section(
     {
         items: [],
@@ -63,16 +63,10 @@ const section = new Section(
 
 api.getInitialCards()
     .then(cardsData => {
-        console.log("Cards data from API:", cardsData); // Agrega esto para verificar la estructura en la consola
-        cardsData.forEach(cardData => {
-            const cardElement = createCard(cardData);
-            if (cardElement) {
-                section.addItem(cardElement);
-            }
-        });
+        section._items = cardsData; // Asignar datos obtenidos a _items
+        section.renderItems(); // Renderizar tarjetas usando renderItems
     })
     .catch(err => console.error('Error loading cards from API:', err));
-
 
 function createCard(cardData) {
     const card = new Card({
@@ -98,7 +92,7 @@ const profileModal = new PopupWithForm("#profile-edit-modal", (data) => {
     api.setUserInfo({ name: data.title, about: data.description })
         .then(updatedData => {
             userInfo.setUserInfo(updatedData);
-            profileModal.close();
+            profileModal.close(); // Cierre solo tras respuesta exitosa
         })
         .catch(err => console.error("Error updating profile:", err))
         .finally(() => profileModal.renderLoading(false));
@@ -111,6 +105,7 @@ profileEditButton.addEventListener("click", () => {
     nameInput.value = userData.name;
     descriptionInput.value = userData.about;
     profileModal.open();
+    profileFormValidator.resetValidation(); // Resetear validación al abrir el modal
 });
 
 const newCardModal = new PopupWithForm("#add-card-modal", (data) => {
@@ -126,7 +121,10 @@ const newCardModal = new PopupWithForm("#add-card-modal", (data) => {
 });
 
 newCardModal.setEventListeners();
-addCardButton.addEventListener("click", () => newCardModal.open());
+addCardButton.addEventListener("click", () => {
+    newCardModal.open();
+    addCardFormValidator.resetValidation(); // Resetear validación al abrir el modal
+});
 
 const deleteCardPopup = new PopupWithConfirmation("#confirm-delete-modal");
 deleteCardPopup.setEventListeners();
@@ -143,7 +141,7 @@ function handleDeleteCard(cardId, cardElement) {
 }
 
 const avatarModal = new PopupWithForm("#change-avatar-modal", (data) => {
-    avatarModal.renderLoading(true);
+    avatarModal.renderLoading(true, "Updating avatar...");
     api.changeAvatar(data.url)
         .then((updatedData) => {
             userInfo.setAvatar(updatedData.avatar);
@@ -157,6 +155,7 @@ avatarModal.setEventListeners();
 
 document.querySelector(".profile__edit-image-button").addEventListener("click", () => {
     avatarModal.open();
+    avatarFormValidator.resetValidation(); // Resetear validación al abrir el modal
 });
 
 function handleLikeClick(cardId, isLiked) {
@@ -165,10 +164,10 @@ function handleLikeClick(cardId, isLiked) {
         : api.addLike(cardId).then(() => true); // Devuelve true cuando se agrega el like
 }
 
-
-
 const profileFormValidator = new FormValidator(formValidationSettings, editProfileForm);
 const addCardFormValidator = new FormValidator(formValidationSettings, addCardForm);
+const avatarFormValidator = new FormValidator(formValidationSettings, document.querySelector("#modal-form-avatar"));
 
 profileFormValidator.enableValidation();
 addCardFormValidator.enableValidation();
+avatarFormValidator.enableValidation();

@@ -2,10 +2,10 @@ export default class Card {
     constructor({ cardData, cardSelector, handleImageClick, handleDeleteClick, userId, handleLikeButton }) {
         this._name = cardData.name;
         this._link = cardData.link;
-        this._isLiked = cardData.isLiked; // Usa isLiked directamente de los datos de la API
+        this._isLiked = cardData.isLiked;
         this._cardId = cardData._id;
         this._userId = userId;
-        this._ownerId = cardData.owner ? cardData.owner._id : null; // Verificación de owner
+        this._ownerId = cardData.owner ? cardData.owner._id : null;
         this._handleImageClick = handleImageClick;
         this._handleDeleteClick = handleDeleteClick;
         this._cardSelector = cardSelector;
@@ -34,7 +34,7 @@ export default class Card {
         this._likeButton.addEventListener("click", () => {
             this._handleLikeButton(this._cardId, this._isLiked)
                 .then(isLiked => {
-                    this.updateLikes(isLiked);
+                    this.updateLikes(isLiked); // Solo actualizar visualmente si el servidor responde exitosamente
                 })
                 .catch(err => console.error("Error updating like:", err));
         });
