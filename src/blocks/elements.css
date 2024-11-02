@@ -1,0 +1,129 @@
+.elements{
+    margin: 48.25px auto 68px auto;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    max-width: 880px;
+    padding: 0;
+    min-height: 743px;
+}
+
+.elements__card-grid{
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-row-gap: 20px;
+    grid-column-gap: 17px;
+    justify-items: center;
+}
+
+.elements__card{
+    list-style: none;
+    max-width: 282px;
+    height: 361px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background-color: white;
+    position: relative;
+}
+
+.elements__card-image{
+    width: 282px;
+    min-height: 282px;
+    max-height: 282px;
+    object-fit: cover;
+    overflow: hidden;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+}
+
+.elements__card-image:hover{
+    cursor: pointer;
+}
+
+.elements__card-content{
+    margin: 25px 15px 21px;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+}
+
+.elements__card-title{
+    margin: 0;
+    font-weight: 900;
+    font-size: 24px;
+    font-style: none;
+    line-height: 29.05px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.elements__card-button{
+    background-color: #FFFFFF;
+    background-image: url(../images/Vectorlikebutton.svg);
+    border: none;
+    height: 19px;
+    min-width: 21px;
+    transition: all .15s;
+    position: relative;
+    right: 1px;
+    bottom: -5px;
+}
+
+.elements__card-button:hover{
+    cursor: pointer;
+    opacity: .5;
+    /* transform: matrix(0.7, 0.72, -0.71, 0.7, 0, 0); */
+}
+
+.elements__card-button_active{
+    background-image: url(../images/Union.png);
+
+}
+
+.elements__trash-button{
+    background-color: transparent;
+    background-image: url(../images/Trash.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    appearance: none;
+    border: none;
+    width: 18px;
+    height: 19px;
+    position: absolute;
+    top: 18px;
+    right: 15px;
+
+}
+
+.elements__trash-button:hover{
+    cursor: pointer;
+    opacity: .5;
+    transform: matrix(0.7, 0.72, -0.71, 0.7, 0, 0);
+}
+
+
+@media screen and (max-width: 905px){
+    .elements__card-grid{
+        overflow: hidden;
+        margin: 0 auto;
+        max-width: fit-content;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .elements{
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    .elements__card-grid{
+        grid-template-columns: 1fr;
+        width: 320px;
+    }
+}

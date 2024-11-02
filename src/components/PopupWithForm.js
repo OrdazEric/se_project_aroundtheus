@@ -3,35 +3,56 @@ import Popup from "./Popup.js";
 export default class PopupWithForm extends Popup {
   constructor(popupSelector, handleFormSubmit) {
     super(popupSelector);
-    this._modalForm = this._modalElement.querySelector(".modal__form");
-    this._handleFormSubmit = handleFormSubmit;
-    this._inputList = this._modalForm.querySelectorAll(".modal__input");
-  }
-
-  getForm() {
-    return this._modalForm
+    this.popupForm = this.modalElement.querySelector(".modal__form");
+    this.handleFormSubmit = handleFormSubmit;
+    this.submitButton = this.popupForm.querySelector(".modal__button");
+    this.submitButtonText = this.submitButton.textContent;
+    this.inputList = this.popupForm.querySelectorAll(".modal__input");
   }
 
   _getInputValues() {
-    this._inputData = {};
-    this._inputList.forEach((input) => {
-      this._inputData[input.name] = input.value;
+    this.formValues = {};
+    this.inputList.forEach((input) => {
+      this.formValues[input.name] = input.value;
     });
-    return this._inputData;
-  }
-
-  setInputValues(data) {
-    this._inputList.forEach((input) => {
-      // Here you insert the `value` by the `name` of the input
-      input.value = data[input.name];
-    });
+    return this.formValues;
   }
 
   setEventListeners() {
-    this._modalForm.addEventListener("submit", (evt) => {
+    this.popupForm.addEventListener("submit", (evt) => {
       evt.preventDefault();
-      this._handleFormSubmit(this._getInputValues());
+      this.handleFormSubmit(this._getInputValues());
     });
+
+    this.inputList.forEach((input) => {
+      input.addEventListener("input", () => this.toggleSubmitButtonState());
+    });
+
     super.setEventListeners();
+  }
+
+  renderLoading(isLoading, loadingText = "Saving...") {
+    this.submitButton.textContent = isLoading ? loadingText : this.submitButtonText;
+  }
+
+  open() {
+    super.open();
+    this.toggleSubmitButtonState();
+  }
+
+  close() {
+    this.popupForm.reset();
+    super.close();
+  }
+
+  toggleSubmitButtonState() {
+    const isFormValid = this.popupForm.checkValidity();
+    if (isFormValid) {
+      this.submitButton.removeAttribute("disabled");
+      this.submitButton.classList.remove("modal__button_disabled");
+    } else {
+      this.submitButton.setAttribute("disabled", "true");
+      this.submitButton.classList.add("modal__button_disabled");
+    }
   }
 }

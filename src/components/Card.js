@@ -1,52 +1,69 @@
 export default class Card {
-  constructor({ name, link }, cardSelector, handleImageClick) {
-    this._name = name;
-    this._link = link;
-    this._cardSelector = cardSelector;
-    this._handleImageClick = handleImageClick;
-    const cardTemplate = document
-      .querySelector(this._cardSelector)
-      .content.querySelector(".card");
+    constructor({ cardData, cardSelector, handleImageClick, handleDeleteClick, userId, handleLikeButton }) {
+        this._name = cardData.name;
+        this._link = cardData.link;
+        this._isLiked = cardData.isLiked;
+        this._cardId = cardData._id;
+        this._userId = userId;
+        this._ownerId = cardData.owner ? cardData.owner._id : null;
+        this._handleImageClick = handleImageClick;
+        this._handleDeleteClick = handleDeleteClick;
+        this._cardSelector = cardSelector;
+        this._handleLikeButton = handleLikeButton;
+    }
 
-    this._cardElement = cardTemplate.cloneNode(true);
-    this._heartButton = this._cardElement.querySelector(".card__like-button");
-    this._deleteButton = this._cardElement.querySelector(
-      ".card__delete-button"
-    );
-    this._cardImage = this._cardElement.querySelector(".card__image");
-    this._cardTitle = this._cardElement.querySelector(".card__title");
-  }
+    _getTemplate() {
+        const cardElement = document
+            .querySelector(this._cardSelector)
+            .content.querySelector(".card")
+            .cloneNode(true);
+        return cardElement;
+    }
 
-  _handleLikeIcons() {
-    this._heartButton.classList.toggle("card__like-button_active");
-  }
+    // Actualizar el estado visual del like
+    updateLikes(isLiked) {
+        this._isLiked = isLiked;
+        this._likeButton.classList.toggle("card__like-button_active", this._isLiked);
+    }
 
-  _handleDeleteButton() {
-    this._cardElement.remove();
-    this._cardElement = null;
-  }
+    _setEventListeners() {
+        this._cardImage.addEventListener("click", () => {
+            this._handleImageClick({ name: this._name, link: this._link });
+        });
 
-  _setEventListeners() {
-    this._heartButton.addEventListener("click", () => {
-      this._handleLikeIcons();
-    });
+        this._likeButton.addEventListener("click", () => {
+            this._handleLikeButton(this._cardId, this._isLiked)
+                .then(isLiked => {
+                    this.updateLikes(isLiked); // Solo actualizar visualmente si el servidor responde exitosamente
+                })
+                .catch(err => console.error("Error updating like:", err));
+        });
 
-    this._deleteButton.addEventListener("click", () => {
-      this._handleDeleteButton();
-    });
+        if (this._userId === this._ownerId) {
+            this._deleteButton.addEventListener("click", () => {
+                this._handleDeleteClick(this._cardId, this._element);
+            });
+        } else {
+            this._deleteButton.remove();
+        }
+    }
 
-    this._cardImage.addEventListener("click", () => {
-      this._handleImageClick({ name: this._name, link: this._link });
-    });
-  }
+    getView() {
+        this._element = this._getTemplate();
+        this._cardImage = this._element.querySelector(".card__image");
+        this._cardTitle = this._element.querySelector(".card__title");
+        this._likeButton = this._element.querySelector(".card__like-button");
+        this._deleteButton = this._element.querySelector(".card__delete-button");
 
-  getView() {
-    this._cardTitle.textContent = this._name;
-    this._cardImage.src = this._link;
-    this._cardImage.alt = this._name;
+        this._cardImage.src = this._link;
+        this._cardImage.alt = this._name;
+        this._cardTitle.textContent = this._name;
 
-    this._setEventListeners();
+        this._setEventListeners();
 
-    return this._cardElement;
-  }
+        // Reflejar el estado inicial del "like" en el botón
+        if (this._isLiked) this._likeButton.classList.add("card__like-button_active");
+
+        return this._element;
+    }
 }

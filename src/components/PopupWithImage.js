@@ -3,16 +3,20 @@ import Popup from "./Popup.js";
 export default class PopupWithImage extends Popup {
   constructor(popupSelector) {
     super(popupSelector);
+    this.imageElement = this.modalElement?.querySelector(".modal__preview-image");
+    this.imageTitleElement = this.modalElement?.querySelector(".modal__preview-title");
 
-    this._imageEl = this._modalElement.querySelector(".modal__preview-image");
-    this._titleEl = this._modalElement.querySelector(".modal__preview-title");
+    if (!this.imageElement || !this.imageTitleElement) {
+      console.error(`Error: No se pudo encontrar el elemento de imagen o título en el popup ${popupSelector}`);
+    }
   }
 
-  open(cardData) {
-    this._imageEl.src = cardData.link;
-    this._imageEl.alt = cardData.name;
-    this._titleEl.textContent = cardData.name;
-
+  open({ name, link }) {
+    if (this.imageElement && this.imageTitleElement) {
+      this.imageElement.src = link;
+      this.imageElement.alt = name;
+      this.imageTitleElement.textContent = name;
+    }
     super.open();
   }
 }

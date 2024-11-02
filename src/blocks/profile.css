@@ -135,5 +135,33 @@
     }
   }
 
-
+  .profile__image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .profile__edit-image-button {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .profile__image-container:hover .profile__edit-image-button {
+    display: block;
+  }
+  
+  .profile__image {
+    display: block;
+    border-radius: 50%;
+  }
+  
+  .profile__edit-image-icon {
+    width: 24px;
+    height: 24px;
+  }
   
