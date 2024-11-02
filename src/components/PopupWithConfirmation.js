@@ -1,24 +1,26 @@
 import Popup from "./Popup.js";
 
 export default class PopupWithConfirmation extends Popup {
-    constructor(popupSelector) {
-        super(popupSelector);
-        this._confirmButton = this._modalElement.querySelector('.modal__button');
-        this._handleConfirm = null;
-    }
+  constructor(popupSelector) {
+    super(popupSelector);
+    this.confirmButton = this.modalElement?.querySelector(".modal__button");
+  }
 
-    open(handleConfirm) {
-        super.open();
-        this._handleConfirm = handleConfirm;
-    }
+  open(handleConfirm) {
+    this.handleConfirm = handleConfirm;
+    super.open();
+  }
 
-    setEventListeners() {
-        this._confirmButton.addEventListener('click', () => {
-            if (this._handleConfirm) {
-                this._handleConfirm();
-            }
-            this.close();
-        });
-        super.setEventListeners();
+  setEventListeners() {
+    if (this.confirmButton) {
+      this.confirmButton.addEventListener("click", () => {
+        if (typeof this.handleConfirm === "function") {
+          this.handleConfirm();
+        } else {
+          console.error("Error: handleConfirm no es una función");
+        }
+      });
     }
+    super.setEventListeners();
+  }
 }
